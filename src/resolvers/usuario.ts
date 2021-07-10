@@ -9,12 +9,12 @@ export class UsuarioResolver {
     ) {}
 
     @Query(() => [Usuario])
-    async pascientes(): Promise<Usuario[]> {
+    async usuarios(): Promise<Usuario[]> {
         return this.usuarioRepository.find();
     }
 
     @Query(() => Usuario, { nullable: true })
-    pasciente(
+    usuario(
         @Arg('id', () => Int) id: number)
         : Promise<Usuario | undefined>
     {
