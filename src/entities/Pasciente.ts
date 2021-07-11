@@ -56,8 +56,7 @@ export class Pasciente {
     numCartaoNacSaude!: string;
 
     @Field(() => Endereco)
-    @OneToOne(() => Endereco)
-    //@OneToOne(() => Endereco, { cascade: true })
+    @OneToOne(() => Endereco, { cascade: true })
     @JoinColumn({ name: "id_end" })
     endereco: Endereco;
 

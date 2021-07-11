@@ -8,11 +8,13 @@ export class ChecklistResolver {
         private readonly checklistRepository: Repository<Checklist>,
     ) {}
 
+    //ADMINISTRADOR, ANALISTA, AUDITOR, DIGITADOR
     @Query(() => [Checklist])
     async checklists(): Promise<Checklist[]> {
         return this.checklistRepository.find();
     }
 
+    //ADMINISTRADOR, ANALISTA, AUDITOR, DIGITADOR
     @Query(() => Checklist, { nullable: true })
     checklist(
         @Arg('id', () => Int) id: number)

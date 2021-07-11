@@ -68,12 +68,12 @@ export class Prontuario {
     cidObito: string;
 
     @Field(() => Pasciente)
-    @ManyToOne(() => Pasciente)
+    @ManyToOne(() => Pasciente, pasciente => pasciente.id)
     @JoinColumn({ name: "pasc_id" })
     pasciente: Pasciente;
 
     @Field(() => [Cirurgico])
-    @OneToMany(() => Cirurgico, cirurgico => cirurgico.numProntuario)
+    @OneToMany(() => Cirurgico, cirurgico => cirurgico.numProntuario, { cascade: true })
     @JoinColumn({ name: "nu_prontuario" })
     cirurgicos: Cirurgico[];
 

@@ -14,7 +14,7 @@ export class GrupoProcedimento {
     descricao!: string;
 
     @Field(() => [Procedimento])
-    @OneToMany(() => Procedimento, procedimento => procedimento.id)
+    @OneToMany(() => Procedimento, procedimento => procedimento.id, { cascade: true })
     @JoinColumn({ name: "proce_id" })
     procedimentos: Procedimento[];
 

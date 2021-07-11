@@ -19,13 +19,13 @@ export class Checklist {
 
     //equipes profissionais
     @Field(() => [Equipe])
-    @OneToMany(() => Equipe, equipe => equipe.id)
+    @OneToMany(() => Equipe, equipe => equipe.id, { cascade: true })
     @JoinColumn({ name: "equipe_id" })
     equipes: Equipe[];
 
     //grupoProcedimento onetomany
     @Field(() => [GrupoProcedimento])
-    @OneToMany(() => GrupoProcedimento, grupoprocedimento => grupoprocedimento.id)
+    @OneToMany(() => GrupoProcedimento, grupoprocedimento => grupoprocedimento.id, { cascade: true })
     @JoinColumn({ name: "grupo_id" })
     grupoprocedimentos: GrupoProcedimento[];
 
