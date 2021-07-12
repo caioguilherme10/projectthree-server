@@ -1,45 +1,7 @@
-import { Query, Resolver, Arg, Int, Mutation, InputType, Field } from "type-graphql";
+import { Query, Resolver, Arg, Int, Mutation } from "type-graphql";
 import { Repository, getConnection } from "typeorm";
-import { Pasciente, Sexo, Raca } from "../entities/Pasciente";
-
-@InputType()
-class PascienteInput {
-    @Field()
-    nome: string;
-    @Field()
-    nascimento: string;
-    @Field()
-    sexo: Sexo;
-    @Field()
-    raca: Raca;
-    @Field()
-    nomeMae: string;
-    @Field()
-    numCartaoNacSaude: string;
-    @Field()
-    endereco: EnderecoInput;
-}
-
-@InputType()
-class EnderecoInput {
-    @Field()
-    logradouro: string;
-    @Field()
-    numero: string;
-    @Field()
-    complemento: string;
-    @Field()
-    bairro: string;
-    @Field()
-    nomeMunicipio: string;
-    @Field()
-    codMunicipio: string;
-    @Field()
-    uf: string;
-    @Field()
-    cep: string;
-}
-
+import { Pasciente } from "../entities/Pasciente";
+import { PascienteInput } from "./types/pasciente-input";
 
 @Resolver(Pasciente)
 export class PascienteResolver {

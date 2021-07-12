@@ -32,15 +32,15 @@ export class Prontuario {
     aih: string;
 
     @Field(() => String)
-    @CreateDateColumn({ name: "dt_adm" })
+    @Column({ name: "dt_adm", type: "date" })
     dataAdmissao = new Date();
 
     @Field(() => String)
-    @CreateDateColumn({ name: "hr_adm" })
+    @Column({ name: "hr_adm", type: "date" })
     horaAdmissao = new Date();
 
     @Field(() => String)
-    @CreateDateColumn({ name: "dt_alta" })
+    @Column({ name: "dt_alta", type: "date" })
     dataAlta = new Date();
 
     @Field(() => String)
@@ -79,9 +79,9 @@ export class Prontuario {
 
     @Field(() => String)
     @CreateDateColumn()
-    createdAt = new Date();
+    createdAt = Date;
 
     @Field(() => String)
     @UpdateDateColumn()
-    updatedAt = new Date();
+    updatedAt = Date;
 }

@@ -42,9 +42,9 @@ export class Endereco {
 
     @Field(() => String)
     @CreateDateColumn()
-    createdAt = new Date();
+    createdAt = Date;
 
     @Field(() => String)
     @UpdateDateColumn()
-    updatedAt = new Date();
+    updatedAt = Date;
 }

@@ -1,60 +1,7 @@
-import { Query, Resolver, Arg, Mutation, InputType, Field } from "type-graphql";
+import { Query, Resolver, Arg, Mutation } from "type-graphql";
 import { Repository, getConnection } from "typeorm";
-import { Prontuario, TipoProntuario } from "../entities/Prontuario";
-
-@InputType()
-class ProntuarioInput {
-    @Field()
-    numProntuario: string;
-    @Field()
-    tipoProntuario: TipoProntuario;
-    @Field()
-    apresentacao: string;
-    @Field()
-    aih: string;
-    @Field()
-    dataAdmissao: string;
-    @Field()
-    horaAdmissao: string;
-    @Field()
-    dataAlta: string;
-    @Field()
-    tipoAlta: string;
-    @Field()
-    procRegulado: string;
-    @Field()
-    mudProcedimento: string;
-    @Field()
-    cid1: string;
-    @Field()
-    cid2: string;
-    @Field()
-    cidObito: string;
-    @Field()
-    pasciente: PascienteInput;
-    @Field()
-    cirurgicos: CirurgicoInput[];
-}
-
-@InputType()
-class CirurgicoInput {
-    @Field()
-    numProntuario: string;
-    @Field()
-    numCirurgico: number;
-    @Field()
-    cirurgico: string;
-    @Field()
-    nome: string;
-    @Field()
-    especialidade: string;
-}
-
-@InputType()
-class PascienteInput {
-    @Field()
-    id: number;
-}
+import { Prontuario } from "../entities/Prontuario";
+import { ProntuarioInput } from "./types/prontuario-input";
 
 @Resolver(Prontuario)
 export class ProntuarioResolver {
@@ -98,7 +45,7 @@ export class ProntuarioResolver {
             .createQueryBuilder()
             .update(Prontuario)
             .set(input)
-            .where('numProntuario = :numProntuario', {
+            .where('nu_prontuario = :numProntuario', {
                 numProntuario,
             })
             .returning("*")

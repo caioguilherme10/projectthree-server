@@ -1,22 +1,7 @@
-import { Query, Resolver, Arg, Int, Mutation, InputType, Field } from "type-graphql";
+import { Query, Resolver, Arg, Int, Mutation } from "type-graphql";
 import { Repository } from "typeorm";
-import { Usuario, StatusUsuario, TipoUsuario } from "../entities/Usuario";
-
-@InputType()
-class UsuarioInput {
-    @Field()
-    cpf: string;
-    @Field()
-    nome: string;
-    @Field()
-    cirurgico: string;
-    @Field()
-    senha: string;
-    @Field()
-    status: StatusUsuario;
-    @Field()
-    tipo: TipoUsuario;
-}
+import { Usuario } from "../entities/Usuario";
+import { UsuarioInput } from "./types/usuario-input";
 
 @Resolver(Usuario)
 export class UsuarioResolver {

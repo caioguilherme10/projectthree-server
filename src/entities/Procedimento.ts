@@ -1,11 +1,11 @@
-import { Entity, PrimaryColumn, Column, CreateDateColumn, UpdateDateColumn } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn } from "typeorm";
 import { Field, Int, ObjectType } from "type-graphql";
 
 @ObjectType()
 @Entity()
 export class Procedimento {
     @Field(() => Int)
-    @PrimaryColumn({ name: "id" })
+    @PrimaryGeneratedColumn({ name: "id" })
     id!: number;
 
     //procedimento, exame, OPM e profissional
@@ -16,61 +16,61 @@ export class Procedimento {
     //cod do procedimento
     @Field(() => String)
     @Column({ type: "varchar", name: "cod", length: 20 })
-    cod!: string;
+    cod: string;
 
     //comp1 mes1
     @Field(() => String)
     @Column({ type: "varchar", name: "comp1", length: 10 })
-    comp1!: string;
+    comp1: string;
     
     //comp2 mes2
     @Field(() => String)
     @Column({ type: "varchar", name: "comp2", length: 10 })
-    comp2!: string;
+    comp2: string;
 
     //comp3 mes3
     @Field(() => String)
     @Column({ type: "varchar", name: "comp3", length: 10 })
-    comp3!: string;
+    comp3: string;
     
     //codigo sus
     @Field(() => String)
     @Column({ type: "varchar", name: "codsus", length: 20 })
-    codsus!: string;
+    codsus: string;
 
     @Field(() => Int)
     @Column({ name: "qtd" })
-    qtd!: number;
+    qtd: number;
 
     @Field(() => String)
     @Column({ type: "varchar", name: "nome", length: 70 })
-    nome!: string;
+    nome: string;
 
     //cirur 5 desses
     @Field(() => [String])
     @Column("simple-array", { name: "cirur" })
-    cirur!: string[];
+    cirur: string[];
 
     //qtd cirur
     @Field(() => [String])
     @Column("simple-array", { name: "qtd_cirur" })
-    qtdcirur!: string[];
+    qtdcirur: string[];
 
     //fornecedor
     @Field(() => String)
     @Column({ type: "varchar", name: "fornecedor", length: 50 })
-    fornecedor!: string;
+    fornecedor: string;
 
     //numero da Nota Fiscal
     @Field(() => String)
     @Column({ type: "varchar", name: "num_nf", length: 20 })
-    numNF!: string;
+    numNF: string;
 
     @Field(() => String)
     @CreateDateColumn()
-    createdAt = new Date();
+    createdAt = Date;
 
     @Field(() => String)
     @UpdateDateColumn()
-    updatedAt = new Date();
+    updatedAt = Date;
 }

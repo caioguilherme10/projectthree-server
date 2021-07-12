@@ -23,7 +23,7 @@ export class Checklist {
     @JoinColumn({ name: "equipe_id" })
     equipes: Equipe[];
 
-    //grupoProcedimento onetomany
+    //grupoProcedimento
     @Field(() => [GrupoProcedimento])
     @OneToMany(() => GrupoProcedimento, grupoprocedimento => grupoprocedimento.id, { cascade: true })
     @JoinColumn({ name: "grupo_id" })
@@ -35,9 +35,9 @@ export class Checklist {
 
     @Field(() => String)
     @CreateDateColumn()
-    createdAt = new Date();
+    createdAt = Date;
 
     @Field(() => String)
     @UpdateDateColumn()
-    updatedAt = new Date();
+    updatedAt = Date;
 }
