@@ -2,9 +2,9 @@ import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateCol
 import { Field, ObjectType, registerEnumType, Int } from "type-graphql";
 
 export enum StatusUsuario {
-    ATIVO,
-    INATIVO,
-    BLOQUEADO
+    ATIVO = "ATIVO",
+    INATIVO = "INATIVO",
+    BLOQUEADO = "BLOQUEADO"
 }
 
 registerEnumType(StatusUsuario, {
@@ -12,10 +12,10 @@ registerEnumType(StatusUsuario, {
 });
 
 export enum TipoUsuario {
-    ADMINISTRADOR,
-    ANALISTA,
-    AUDITOR,
-    DIGITADOR
+    ADMINISTRADOR = "ADMINISTRADOR",
+    ANALISTA = "ANALISTA",
+    AUDITOR = "AUDITOR",
+    DIGITADOR = "DIGITADOR"
 }
 
 registerEnumType(TipoUsuario, {
@@ -31,15 +31,14 @@ export class Usuario {
 
     @Field(() => String)
     @Column({ type: "varchar", name: "cpf", length: 14, unique: true })
-    cpf: string;
+    cpf!: string;
 
     @Field(() => String)
     @Column({ type: "varchar", name: "nome", length: 70 })
-    nome: string;
+    nome!: string;
 
-    @Field(() => String)
     @Column({ type: "varchar", name: "senha", length: 60 })
-    senha: string;
+    senha!: string;
 
     @Field(() => StatusUsuario)
     @Column({ type: "enum", enum: StatusUsuario, name: "status" })

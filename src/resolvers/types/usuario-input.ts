@@ -8,8 +8,6 @@ export class UsuarioInput {
     @Field(() => String)
     nome: string;
     @Field(() => String)
-    cirurgico: string;
-    @Field(() => String)
     senha: string;
     @Field(() => StatusUsuario)
     status: StatusUsuario;

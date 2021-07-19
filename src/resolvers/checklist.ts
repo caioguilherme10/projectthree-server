@@ -1,5 +1,5 @@
 import { Query, Resolver, Arg, Int, Mutation, InputType, Field } from "type-graphql";
-import { Repository, getConnection } from "typeorm";
+import { getConnection } from "typeorm";
 import { Checklist } from "../entities/Checklist";
 import { EquipeInput } from "./types/equipe-input";
 import { GrupoProcedimentoInput } from "./types/grupo-procedimento-input";
@@ -13,33 +13,45 @@ class ChecklistInput {
 
 @Resolver(Checklist)
 export class ChecklistResolver {
-    constructor(
-        private readonly checklistRepository: Repository<Checklist>,
-    ) {}
 
     //ADMINISTRADOR, ANALISTA, AUDITOR, DIGITADOR
     @Query(() => [Checklist])
     async checklists(): Promise<Checklist[]> {
-        return this.checklistRepository.find();
+        const result = await getConnection()
+            .createQueryBuilder()
+            .select("checklist")
+            .from(Checklist, "checklist")
+            .getMany();
+        return result;
     }
 
     //ADMINISTRADOR, ANALISTA, AUDITOR, DIGITADOR
     @Query(() => Checklist, { nullable: true })
-    checklist(
+    async checklist(
         @Arg('id', () => Int) id: number)
         : Promise<Checklist | undefined>
     {
-        return this.checklistRepository.findOne({ id });
+        const result = await getConnection()
+            .createQueryBuilder()
+            .select("checklist")
+            .from(Checklist, "checklist")
+            .where("checklist.id = :id", { id })
+            .getOne();
+        return result;
     }
 
     //ADMINISTRADOR, ANALISTA
     //parte 1 add numero do prontuario
     @Mutation(() => Checklist)
     async createCheckilistParte1(@Arg("input", () => ChecklistInput) input: ChecklistInput): Promise<Checklist> {
-        const checklist = this.checklistRepository.create({
-            ...input,
-        });
-        return await this.checklistRepository.save(checklist);
+        const result = await getConnection()
+            .createQueryBuilder()
+            .insert()
+            .into(Checklist)
+            .values(input)
+            .returning("*")
+            .execute();
+        return result.raw[0];
     }
 
     //ADMINISTRADOR, ANALISTA
@@ -108,7 +120,12 @@ export class ChecklistResolver {
     //ADMINISTRADOR
     @Mutation(() => Boolean)
     async deleteChecklist(@Arg("id", () => Int) id: number): Promise<boolean> {
-        await this.checklistRepository.delete({ id });
+        await getConnection()
+            .createQueryBuilder()
+            .delete()
+            .from(Checklist)
+            .where("id = :id", { id })
+            .execute();
         return true;
     }
 }

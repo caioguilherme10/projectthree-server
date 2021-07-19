@@ -1,36 +1,48 @@
 import { Query, Resolver, Arg, Mutation } from "type-graphql";
-import { Repository, getConnection } from "typeorm";
+import { getConnection } from "typeorm";
 import { Prontuario } from "../entities/Prontuario";
 import { ProntuarioInput } from "./types/prontuario-input";
 
 @Resolver(Prontuario)
 export class ProntuarioResolver {
-    constructor(
-        private readonly prontuarioRepository: Repository<Prontuario>,
-    ) {}
 
     //ADMINISTRADOR
     @Query(() => [Prontuario])
     async prontuarios(): Promise<Prontuario[]> {
-        return this.prontuarioRepository.find();
+        const result = await getConnection()
+            .createQueryBuilder()
+            .select("prontuario")
+            .from(Prontuario, "prontuario")
+            .getMany();
+        return result;
     }
 
     //ADMINISTRADOR, ANALISTA, AUDITOR, DIGITADOR
     @Query(() => Prontuario, { nullable: true })
-    prontuario(
+    async prontuario(
         @Arg('numProntuario', () => String) numProntuario: string)
         : Promise<Prontuario | undefined>
     {
-        return this.prontuarioRepository.findOne({ numProntuario: numProntuario });
+        const result = await getConnection()
+            .createQueryBuilder()
+            .select("prontuario")
+            .from(Prontuario, "prontuario")
+            .where("prontuario.nu_prontuario = :numProntuario", { numProntuario })
+            .getOne();
+        return result;
     }
 
     //ADMINISTRADOR
     @Mutation(() => Prontuario)
     async createProntuario(@Arg("input") input: ProntuarioInput): Promise<Prontuario> {
-        const prontuario = this.prontuarioRepository.create({
-            ...input,
-        });
-        return await this.prontuarioRepository.save(prontuario);
+        const result = await getConnection()
+            .createQueryBuilder()
+            .insert()
+            .into(Prontuario)
+            .values(input)
+            .returning("*")
+            .execute();
+        return result.raw[0];
     }
 
     //ADMINISTRADOR
@@ -56,7 +68,12 @@ export class ProntuarioResolver {
     //ADMINISTRADOR
     @Mutation(() => Boolean)
     async deleteProntuario(@Arg("numProntuario", () => String) numProntuario: string): Promise<boolean> {
-        await this.prontuarioRepository.delete({ numProntuario });
+        await getConnection()
+            .createQueryBuilder()
+            .delete()
+            .from(Prontuario)
+            .where("nu_prontuario = :numProntuario", { numProntuario })
+            .execute();
         return true;
     }
 }

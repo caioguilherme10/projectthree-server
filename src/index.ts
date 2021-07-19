@@ -16,6 +16,9 @@ import { PascienteResolver } from "./resolvers/pasciente";
 import { ProntuarioResolver } from "./resolvers/prontuario";
 import { UsuarioResolver } from "./resolvers/usuario";
 import { ChecklistResolver } from "./resolvers/checklist";
+import redis from 'redis';
+import session from 'express-session';
+import connectRedis from 'connect-redis';
 
 const main = async () => {
     const conn = await createConnection({
@@ -28,6 +31,23 @@ const main = async () => {
         entities: [Prontuario, Pasciente, Endereco, Cirurgico, Usuario, Equipe, Procedimento, GrupoProcedimento, Checklist]
     });
     const app = express();
+    const RedisStore = connectRedis(session);
+    const redisClient = redis.createClient(6379,'192.168.99.100');
+    app.set('trust proxy', 1)
+    app.use(
+        session({
+            name: "kai",
+            store: new RedisStore({ client: redisClient, disableTouch: true }),
+            cookie: {
+                maxAge: 1000 * 60 * 60 * 24 * 365 * 10, // 10 years
+                httpOnly: true,
+                sameSite: "lax", // csrf
+            },
+            saveUninitialized: false,
+            secret: "keyboard kai",
+            resave: false,
+        })
+    );
     const apolloServer = new ApolloServer({
         schema: await buildSchema({
             resolvers: [PascienteResolver, ProntuarioResolver, UsuarioResolver, ChecklistResolver],

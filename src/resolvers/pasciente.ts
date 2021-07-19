@@ -1,39 +1,57 @@
 import { Query, Resolver, Arg, Int, Mutation } from "type-graphql";
-import { Repository, getConnection } from "typeorm";
+import { getConnection } from "typeorm";
 import { Pasciente } from "../entities/Pasciente";
 import { PascienteInput } from "./types/pasciente-input";
 
 @Resolver(Pasciente)
 export class PascienteResolver {
-    constructor(
-        private readonly pascienteRepository: Repository<Pasciente>,
-    ) {}
 
     //ADMINISTRADOR
     @Query(() => [Pasciente])
     async pascientes(): Promise<Pasciente[]> {
-        return this.pascienteRepository.find();
+        const result = await getConnection()
+            .createQueryBuilder()
+            .select("pasciente")
+            .from(Pasciente, "pasciente")
+            .getMany();
+        return result;
     }
 
     //ADMINISTRADOR, ANALISTA, AUDITOR, DIGITADOR
     @Query(() => Pasciente, { nullable: true })
-    getPasciente(@Arg('id', () => Int) id: number): Promise<Pasciente | undefined> {
-        return this.pascienteRepository.findOne({ id });
+    async getPasciente(@Arg('id', () => Int) id: number): Promise<Pasciente | undefined> {
+        const result = await getConnection()
+            .createQueryBuilder()
+            .select("pasciente")
+            .from(Pasciente, "pasciente")
+            .where("pasciente.id = :id", { id })
+            .getOne();
+        return result;
     }
 
     //ADMINISTRADOR, ANALISTA, AUDITOR, DIGITADOR
     @Query(() => Pasciente, { nullable: true })
-    getPascienteNome(@Arg('nome', () => String) nome: string): Promise<Pasciente | undefined> {
-        return this.pascienteRepository.findOne({ nome: nome });
+    async getPascienteNome(@Arg('nome', () => String) nome: string): Promise<Pasciente | undefined> {
+        const result = await getConnection()
+            .createQueryBuilder()
+            .select("pasciente")
+            .from(Pasciente, "pasciente")
+            .where("pasciente.nome = :nome", { nome })
+            .getOne();
+        return result;
     }
 
     //ADMINISTRADOR
     @Mutation(() => Pasciente)
     async createPasciente(@Arg("input") input: PascienteInput): Promise<Pasciente> {
-        const pasciente = this.pascienteRepository.create({
-            ...input,
-        });
-        return await this.pascienteRepository.save(pasciente);
+        const result = await getConnection()
+            .createQueryBuilder()
+            .insert()
+            .into(Pasciente)
+            .values(input)
+            .returning("*")
+            .execute();
+        return result.raw[0];
     }
 
     //ADMINISTRADOR
@@ -59,7 +77,12 @@ export class PascienteResolver {
     //ADMINISTRADOR
     @Mutation(() => Boolean)
     async deletePasciente(@Arg("id", () => Int) id: number): Promise<boolean> {
-        await this.pascienteRepository.delete({ id });
+        await getConnection()
+            .createQueryBuilder()
+            .delete()
+            .from(Pasciente)
+            .where("id = :id", { id })
+            .execute();
         return true;
     }
 }
